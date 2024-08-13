@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (Texture*) createTexture: (Engine*) engine :(NSData*) buffer :(bool) srgb;
 + (IndirectLight*) createIndirectLight: (Engine*) engine :(NSData*) buffer :(bool) srgb;
 + (Skybox*) createSkybox: (Engine*) engine :(NSData*) buffer :(bool) srgb;
++ (Skybox*) createColorSkybox: (Engine*) engine :(simd_float4)color :(bool) srgb;
 + (simd_double3x3) getSphericalHarmonics:(NSData*) buffer;
 
 NS_ASSUME_NONNULL_END
