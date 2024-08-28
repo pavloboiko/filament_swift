@@ -71,9 +71,9 @@
     nativeRenderer->copyFrame((filament::SwapChain*) dstSwapChain.swapchain, filament::Viewport(dstViewport.left, dstViewport.bottom, dstViewport.width, dstViewport.height), filament::Viewport(srcViewport.left, srcViewport.bottom, srcViewport.width, srcViewport.height));
 }
 - (NSData *)readPixels:(int)xoffset :(int)yoffset :(int)width :(int)height{
-    // Calculate the necessary buffer size (assuming RGBA format)
-    size_t bufferSize = width * height * 4; // 4 bytes per pixel for RGBA
-    
+    // Calculate the buffer size for RGBA (4 bytes per pixel)
+    size_t bufferSize = width * height * 4;
+
     // Allocate memory for the pixel buffer
     void* buffer = malloc(bufferSize);
     if (buffer == NULL) {
@@ -81,20 +81,30 @@
         return nil;
     }
     
-    // Create a PixelBufferDescriptor with the allocated buffer
+    // Create a PixelBufferDescriptor
     filament::backend::PixelBufferDescriptor pixelBufferDescriptor(
         buffer, bufferSize,
         filament::backend::PixelDataFormat::RGBA,
         filament::backend::PixelDataType::UBYTE,
         [](void* buffer, size_t size, void* user) {
-            // Callback to free the buffer once Filament is done
+            // Free the buffer after use
             free(buffer);
         },
-        nullptr // You can pass user data if needed, nullptr in this case
+        nullptr // No additional user data
     );
-    
+
+    // Read the pixels into the buffer
     nativeRenderer->readPixels(xoffset, yoffset, width, height, std::move(pixelBufferDescriptor));
-    return [[NSData alloc] initWithBytes:buffer length:bufferSize];
+
+    // Convert the buffer to NSData
+    NSData *data = [[NSData alloc] initWithBytes:buffer length:bufferSize];
+    
+    if (data.length != bufferSize) {
+        NSLog(@"Error: The size of the NSData object does not match the expected buffer size.");
+        return nil;
+    }
+
+    return data;
 }
 - (NSData *)readPixels:(RenderTarget *)target :(int)xoffset :(int)yoffset :(int)width :(int)height{
     auto buf = filament::backend::PixelBufferDescriptor();
