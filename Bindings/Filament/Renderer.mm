@@ -71,38 +71,31 @@
     nativeRenderer->copyFrame((filament::SwapChain*) dstSwapChain.swapchain, filament::Viewport(dstViewport.left, dstViewport.bottom, dstViewport.width, dstViewport.height), filament::Viewport(srcViewport.left, srcViewport.bottom, srcViewport.width, srcViewport.height));
 }
 - (NSData *)readPixels:(int)xoffset :(int)yoffset :(int)width :(int)height{
-    // Calculate the buffer size for RGBA (4 bytes per pixel)
-    size_t bufferSize = width * height * 4;
+    size_t bufferSize = width * height * 4; // Assuming RGBA format
 
-    // Allocate memory for the pixel buffer
     void* buffer = malloc(bufferSize);
     if (buffer == NULL) {
         NSLog(@"Failed to allocate memory for pixel buffer.");
         return nil;
     }
-    
-    // Create a PixelBufferDescriptor
+
     filament::backend::PixelBufferDescriptor pixelBufferDescriptor(
         buffer, bufferSize,
         filament::backend::PixelDataFormat::RGBA,
         filament::backend::PixelDataType::UBYTE,
         [](void* buffer, size_t size, void* user) {
-            // Free the buffer after use
             free(buffer);
         },
-        nullptr // No additional user data
+        nullptr
     );
 
-    // Read the pixels into the buffer
     nativeRenderer->readPixels(xoffset, yoffset, width, height, std::move(pixelBufferDescriptor));
 
-    // Convert the buffer to NSData
+    // Log some of the data to ensure it's being populated
     NSData *data = [[NSData alloc] initWithBytes:buffer length:bufferSize];
-    
-    if (data.length != bufferSize) {
-        NSLog(@"Error: The size of the NSData object does not match the expected buffer size.");
-        return nil;
-    }
+    NSLog(@"Captured data length: %lu", (unsigned long)data.length);
+    NSData *sampleData = [data subdataWithRange:NSMakeRange(0, MIN(16, data.length))];
+    NSLog(@"Sample data: %@", [sampleData description]);
 
     return data;
 }
