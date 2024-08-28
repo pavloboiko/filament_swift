@@ -92,9 +92,9 @@
         },
         nullptr // You can pass user data if needed, nullptr in this case
     );
-    auto buf = filament::backend::PixelBufferDescriptor();
+    
     nativeRenderer->readPixels(xoffset, yoffset, width, height, std::move(pixelBufferDescriptor));
-    return [[NSData alloc] initWithBytes:buf.buffer length:bufferSize];
+    return [[NSData alloc] initWithBytes:buffer length:bufferSize];
 }
 - (NSData *)readPixels:(RenderTarget *)target :(int)xoffset :(int)yoffset :(int)width :(int)height{
     auto buf = filament::backend::PixelBufferDescriptor();
