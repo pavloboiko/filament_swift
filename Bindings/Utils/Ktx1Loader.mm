@@ -67,7 +67,6 @@
     
     auto skybox = filament::Skybox::Builder()    
         .color(filament::math::float4(color[0], color[1], color[2], color[3]))
-        .intensity(1000000)
         .build(*nEngine);
     
     return [[Skybox alloc] init: skybox];
