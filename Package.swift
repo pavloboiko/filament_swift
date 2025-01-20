@@ -11,12 +11,10 @@ let package = Package(
     products: [
         .library(
             name: "Filament",
-            type: .dynamic,
             targets: ["Filament"]
         ),
         .library(
             name: "Bindings",
-            type: .dynamic,
             targets: ["Bindings"]
         ),
     ],
