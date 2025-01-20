@@ -10,15 +10,21 @@ let package = Package(
     name: "filament_swift",
     products: [
         .library(
-            name: "filament",
+            name: "Filament",
             type: .dynamic,
-            targets: ["Filament", "Bindings"] + targets.map({ $0 })),
+            targets: ["Filament"]
+        ),
+        .library(
+            name: "Bindings",
+            type: .dynamic,
+            targets: ["Bindings"]
+        ),
     ],
     targets: ([
         .target(
             name: "Filament",
             dependencies: [
-                .target(name: "Bindings"),                
+                .target(name: "Bindings"),
             ],
             path: "Helpers"
         ),
