@@ -1,7 +1,6 @@
 //
 //  Ktx1Loader.mm
-//  swift-gltf-viewer
-//
+
 //  Created by Stef Tervelde on 05.07.22.
 //
 #import "Bindings/Utils/Ktx1Loader.h"
@@ -9,6 +8,7 @@
 #import <filament/Engine.h>
 #import <filament/IndirectLight.h>
 #import <filament/Skybox.h>
+#import "../Math.h"
 
 @implementation Ktx1Loader
 
@@ -47,14 +47,28 @@
     auto length = (uint32_t) buffer.length;
     
     auto bundle = new ktxreader::Ktx1Bundle(bytes, length);
-    
-    auto texture = ktxreader::Ktx1Reader::createTexture(nEngine, bundle, srgb);
+    const auto deleter = [](void* userdata) {
+        auto* bundle = (ktxreader::Ktx1Bundle*) userdata;
+        delete bundle;
+    };
+    auto texture = ktxreader::Ktx1Reader::createTexture(nEngine, *bundle, srgb, deleter, bundle);
     
     auto skybox = filament::Skybox::Builder()
         .environment(texture)
+        .showSun(true)
         .build(*nEngine);
     
     return [[Skybox alloc] init: skybox];
+    
+}
++ (simd_double3x3)getSphericalHarmonics:(NSData *)buffer{
+    auto bundle = new ktxreader::Ktx1Bundle((uint8_t*)buffer.bytes, (uint32_t) buffer.length);
+    
+    filament::math::float3 harmonics[9];
+    
+    bundle->getSphericalHarmonics(harmonics);
+    
+    return SIMD_DOUBLE3X3_FROM_MAT3X3(harmonics);
     
 }
 

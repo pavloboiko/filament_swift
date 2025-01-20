@@ -1,7 +1,6 @@
 //
 //  RenderableBuilder.h
-//  swift-gltf-viewer
-//
+
 //  Created by Stef Tervelde on 30.06.22.
 //
 #import <Foundation/Foundation.h>
@@ -11,7 +10,7 @@
 #import "MaterialInstance.h"
 #import "Box.h"
 #import "Engine.h"
-#import "../Utils/Entity.h"
+#import "Entity.h"
 
 #ifndef RenderableBuilder_h
 #define RenderableBuilder_h
@@ -49,7 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param maxIndex specifies the maximum index contained in the index buffer
  * @param count number of indices to read (for triangles, this should be a multiple of 3)
  */
-- (instancetype) geometry: (int) index :(PrimitiveType) type :(VertexBuffer*) vertices :(IndexBuffer*) indices :(int) offset :(int) count;
+- (instancetype) geometry: (int) index :(PrimitiveType) type :(VertexBuffer*) vertices :(IndexBuffer*) indices :(NSInteger) offset :(NSInteger) count :(Engine*) engine;
 
 /**
  * Binds a material instance to the specified primitive.
@@ -85,7 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
  * should encompass all possible vertex positions. It is mandatory unless culling is
  * disabled for the renderable.</p>
  */
-- (instancetype) boundingBox: (Box*) aabb;
+- (instancetype) boundingBox: (Box) aabb;
 /**
  * Sets bits in a visibility mask. By default, this is 0x1.
  *
@@ -173,7 +172,6 @@ NS_ASSUME_NONNULL_BEGIN
  * @param enabled If true, enables buffer object mode.  False by default.
  */
 - (instancetype) enableSkinningBuffers: (bool) enabled;
-
 // TODO: Skinning & Morphing functions
 
 - (instancetype) build: (Engine*) engine :(Entity) entity;

@@ -1,7 +1,6 @@
 //
 //  IndirectLight.h
-//  swift-gltf-viewer
-//
+
 //  Created by Stef Tervelde on 30.06.22.
 //
 #import <Foundation/Foundation.h>
@@ -62,16 +61,40 @@
 @interface IndirectLight : NSObject
 
 @property (nonatomic, readonly, nonnull) void* light  NS_SWIFT_UNAVAILABLE("Don't access the raw pointers");
-- (nonnull id) init: (nonnull void*) light NS_SWIFT_UNAVAILABLE("Create a new renderer with engine.createRenderer");
+- (nonnull id) init: (nonnull void*) light NS_SWIFT_UNAVAILABLE("Instances are created internally");
 - (nonnull id) init NS_UNAVAILABLE;
 
+/**
+ * Sets the environment's intensity.
+ *
+ * Because the environment is encoded usually relative to some reference, the
+ * range can be adjusted with this method.
+ *
+ * @param intensity  Scale factor applied to the environment and irradiance such that
+ *                   the result is in lux, or <i>lumen/m^2</i> (default = 30000)
+ */
 - (void) setIntensity: (double) intensity;
+/**
+ * Returns the environment's intensity in <i>lux</i>, or <i>lumen/m^2</i>.
+ */
 - (double) getIntensity;
-
+/**
+ * Sets the rigid-body transformation to apply to the IBL.
+ *
+ * @param rotation 3x3 rotation matrix. Must be a rigid-body transform.
+ */
 - (void) setRotation: (simd_double3x3) rotation;
+/**
+ * Returns the rigid-body transformation applied to the IBL.
+ */
 - (simd_double3x3) getRotation;
-
+/**
+ * Returns the associated reflection map, or null if it does not exist.
+ */
 - (nonnull Texture*) getReflectionsTexture;
+/**
+ * Returns the associated irradiance map, or null if it does not exist.
+ */
 - (nonnull Texture*) getIrradianceTexture;
 /**
  * Helper to estimate the direction of the dominant light in the environment represented by

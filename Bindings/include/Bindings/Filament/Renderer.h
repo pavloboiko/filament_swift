@@ -35,7 +35,6 @@ NS_SWIFT_NAME(Renderer.ClearOptions)
 @property CIColor*_Nonnull clearColor;
 @property bool clear;
 @property bool discard;
-- (nonnull id) init;
 @end
 
 
@@ -60,7 +59,7 @@ NS_SWIFT_NAME(Renderer.ClearOptions)
 @interface Renderer: NSObject
 
 @property (nonatomic, readonly, nonnull) void* renderer NS_SWIFT_UNAVAILABLE("Don't access the raw pointers");
-- (nonnull id) init: (nonnull void*) renderer NS_SWIFT_UNAVAILABLE("Create a new renderer with engine.createRenderer");
+- (nonnull id) init: (nonnull void*) renderer NS_SWIFT_UNAVAILABLE("Instances are created internally");
 - (nonnull id) init NS_UNAVAILABLE;
 
 - (void) setDisplayInfo :(nonnull DisplayInfo*) info;
@@ -219,7 +218,7 @@ NS_SWIFT_NAME(Renderer.ClearOptions)
  * @param srcViewport the source rectangle to be copied
  * @param flags one or more <code>CopyFrameFlag</code> behavior configuration flags
  */
-- (void) copyFrame: (nonnull SwapChain*) dstSwapChain :(nonnull Viewport*) dstViewport :(nonnull Viewport*) srcViewport :(int) flags;
+- (void) copyFrame: (nonnull SwapChain*) dstSwapChain :(Viewport) dstViewport :(Viewport) srcViewport :(int) flags;
 /**
  * Reads back the content of the {@link SwapChain} associated with this <code>Renderer</code>.
  *
@@ -285,7 +284,7 @@ NS_SWIFT_NAME(Renderer.ClearOptions)
  * @exception BufferOverflowException if the specified parameters would result in reading
  * outside of <code>buffer</code>.
  */
-- (void) readPixels: (int) xoffset :(int) yoffset :(int) width :(int) height :(nonnull PixelBufferDescriptor*) buffer;
+- (nonnull NSData*) readPixels: (int) xoffset :(int) yoffset :(int) width :(int) height;
 /**
  * Reads back the content of a specified {@link RenderTarget}.
  *
@@ -355,7 +354,7 @@ NS_SWIFT_NAME(Renderer.ClearOptions)
  * @exception BufferOverflowException if the specified parameters would result in reading
  * outside of <code>buffer</code>.
  */
-- (void) readPixels: (nonnull RenderTarget*) target :(int) xoffset :(int) yoffset :(int) width :(int) height :(nonnull PixelBufferDescriptor*) buffer;
+- (nonnull NSData*) readPixels: (nonnull RenderTarget*) target :(int) xoffset :(int) yoffset :(int) width :(int) height;
 /**
  * Returns a timestamp (in seconds) for the last call to {@link #beginFrame}. This value is
  * constant for all {@link View views} rendered during a frame. The epoch is set with

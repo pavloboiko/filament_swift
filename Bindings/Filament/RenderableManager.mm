@@ -1,12 +1,13 @@
 //
 //  RenderableManager.mm
-//  swift-gltf-viewer
-//
+
 //  Created by Stef Tervelde on 30.06.22.
 //
 #import "Bindings/Filament/RenderableManager.h"
 #import <filament/RenderableManager.h>
 #import <filament/Box.h>
+#import <utils/Entity.h>
+#import "../Math.h"
 
 @implementation RenderableManager{
     filament::RenderableManager* nativeManager;
@@ -16,6 +17,20 @@
     self->_manager = manager;
     self->nativeManager = (filament::RenderableManager*)manager;
     return self;
+}
+
+- (void)setAxisAlignedBoundingBox:(EntityInstance)instance :(Box)aabb{
+    nativeManager->setAxisAlignedBoundingBox(instance, {
+        .center=*(filament::math::float3*)&aabb.center,
+        .halfExtent=*(filament::math::float3*)&aabb.halfExtent
+    });
+}
+- (Box)getAxisAlignedBoundingBox:(EntityInstance)instance{
+    auto box = nativeManager->getAxisAlignedBoundingBox(instance);
+    return {
+        .center=*(simd_float3*)&box.center,
+        .halfExtent=*(simd_float3*)&box.halfExtent
+    };
 }
 
 - (void)setLayerMask:(EntityInstance)instance :(uint8_t)select :(uint8_t)value{
@@ -66,4 +81,65 @@
 - (void)setGlobalBlendOrderEnabledAt:(EntityInstance)instance :(int)primitiveIndex :(int)blendOrder{
     nativeManager->setGlobalBlendOrderEnabledAt(instance, primitiveIndex, blendOrder);
 }
+- (u_int32_t)getEnabledAttributesAt:(EntityInstance)instance :(size_t)primitiveIndex {
+    return nativeManager->getEnabledAttributesAt(instance, primitiveIndex).getValue();
+}
+
+- (bool)getFogEnabled:(EntityInstance)instance {
+    return nativeManager->getFogEnabled(instance);
+}
+
+- (EntityInstance)getInstance:(Entity)e {
+    return nativeManager->getInstance(utils::Entity::import(e));
+}
+
+- (uint8_t)getLayerMask:(EntityInstance)instance {
+    return nativeManager->getLayerMask(instance);
+}
+
+- (nullable MorphTargetBuffer *)getMorphTargetBufferAt:(EntityInstance)instance :(uint8_t)level :(size_t)primitiveIndex {
+    auto buffer = nativeManager->getMorphTargetBufferAt(instance, level, primitiveIndex);
+    return [[MorphTargetBuffer alloc] init:buffer];
+}
+
+- (size_t)getMorphTargetCount:(EntityInstance)instance {
+    return nativeManager->getMorphTargetCount(instance);
+}
+
+- (bool)hasComponent:(Entity)e {
+    return nativeManager->hasComponent(utils::Entity::import(e));
+}
+
+- (void)setBones:(EntityInstance)instance :(nonnull const simd_float4 *)transforms :(size_t)boneCount :(size_t)offset {
+#warning  Get float4 array from swift
+}
+
+- (void)setChannel:(EntityInstance)instance :(uint8_t)channel {
+    nativeManager->setChannel(instance, channel);
+}
+
+- (void)setFogEnabled:(EntityInstance)instance :(bool)enable {
+    nativeManager->setFogEnabled(instance, enable);
+}
+
+- (void)setMorphTargetBufferAt:(EntityInstance)instance :(uint8_t)level :(size_t)primitiveIndex :(nonnull MorphTargetBuffer *)morphTargetBuffer :(size_t)offset :(size_t)count {
+    nativeManager->setMorphTargetBufferAt(instance, level, primitiveIndex, (filament::MorphTargetBuffer*)morphTargetBuffer.buffer, offset, count);
+}
+
+- (void)setMorphTargetBufferAt:(EntityInstance)instance :(uint8_t)level :(size_t)primitiveIndex :(nonnull MorphTargetBuffer *)morphTargetBuffer {
+    nativeManager->setMorphTargetBufferAt(instance, level, primitiveIndex, (filament::MorphTargetBuffer*)morphTargetBuffer.buffer);
+}
+
+- (void)setMorphWeights:(EntityInstance)instance :(nonnull const float *)weights :(size_t)count :(size_t)offset {
+#warning  Get float array from swift
+}
+
+- (void)setSkinningBuffer:(EntityInstance)instance :(nonnull SkinningBuffer *)skinningBuffer :(size_t)count :(size_t)offset {
+    nativeManager->setSkinningBuffer(instance, (filament::SkinningBuffer*)skinningBuffer.buffer, count, offset);
+}
+
+- (void)destroy:(Entity)e {
+    nativeManager->destroy(utils::Entity::import(e));
+}
+
 @end

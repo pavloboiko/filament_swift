@@ -1,11 +1,12 @@
 //
 //  RenderTarget.swift
-//  swift-gltf-viewer
-//
+
 //  Created by Stef Tervelde on 30.06.22.
 //
-import FilamentBindings
+import Bindings
 
-extension RenderTarget{
-    
+extension Renderer{
+    public var userTime: Double{
+        getUserTime()
+    }
 }

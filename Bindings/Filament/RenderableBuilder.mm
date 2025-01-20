@@ -1,12 +1,15 @@
 //
 //  RenderableBuilder.mm
-//  swift-gltf-viewer
-//
+
 //  Created by Stef Tervelde on 30.06.22.
 //
 #import "Bindings/Filament/RenderableBuilder.h"
 #import <filament/RenderableManager.h>
+#import <filament/VertexBuffer.h>
+#import <filament/IndexBuffer.h>
 #import <utils/Entity.h>
+#import "Bindings/Filament/Engine.h"
+#import "../Math.h"
 
 @implementation RenderableBuilder{
     filament::RenderableManager::Builder* nativeBuilder;
@@ -19,8 +22,20 @@
     return self;
 }
 
-- (instancetype)geometry:(int)index :(PrimitiveType)type :(VertexBuffer *)vertices :(IndexBuffer *)indices :(int)offset :(int)count{
-    nativeBuilder->geometry(index,(filament::RenderableManager::PrimitiveType) type, (filament::VertexBuffer*)vertices.buffer, (filament::IndexBuffer*)indices.buffer, offset, count);
+typedef struct
+{
+    float x;
+    float y;
+    float z;
+    float w;
+    float u;
+    float v;
+} Vertex;
+
+- (instancetype)geometry:(int)index :(PrimitiveType)type :(VertexBuffer *)vertices2 :(IndexBuffer *)indices2 :(NSInteger)offset :(NSInteger)count :(Engine*) engine{
+    auto vertexBuffer2 = (filament::VertexBuffer*) vertices2.buffer;
+    auto indexBuffer2 = (filament::IndexBuffer*) indices2.buffer;
+    nativeBuilder->geometry(index,filament::RenderableManager::PrimitiveType::TRIANGLES, vertexBuffer2, indexBuffer2, offset, count);
     return self;
 }
 - (instancetype)material:(int)index :(MaterialInstance *)material{
@@ -33,6 +48,13 @@
 }
 - (instancetype)globalBlendOrderEnabled:(int)index :(bool)enabled{
     nativeBuilder->globalBlendOrderEnabled(index, enabled);
+    return self;
+}
+- (instancetype)boundingBox:(Box)aabb{
+    nativeBuilder->boundingBox({
+        .center=*(filament::math::float3*)&aabb.center,
+        .halfExtent=*(filament::math::float3*)&aabb.halfExtent
+    });
     return self;
 }
 - (instancetype)layerMask:(uint8_t)select :(uint8_t)value{

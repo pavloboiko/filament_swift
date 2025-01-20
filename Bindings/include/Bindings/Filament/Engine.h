@@ -12,22 +12,23 @@
 
 #import "Renderer.h"
 #import "Scene.h"
-#import "View.h"
 #import "SwapChain.h"
 #import "Camera.h"
-#import "../Utils/Entity.h"
-#import "../Utils/EntityManager.h"
+#import "Entity.h"
+#import "EntityManager.h"
 #import "TransformManager.h"
 #import "LightManager.h"
-#import "RenderableManager.h"
 
 typedef NS_ENUM(NSInteger, Backend) {
-    Default,
-    OpenGL,
-    Vulkan,
-    Metal,
-    Noop,
+    BackendDefault,
+    BackendOpenGL,
+    BackendVulkan,
+    BackendMetal,
+    BackendNoop,
 };
+
+@class RenderableManager;
+@class View;
 
 /**
  * Engine is filament's main entry-point.

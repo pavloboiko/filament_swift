@@ -13,17 +13,12 @@
 #import "../Math.h"
 
 @implementation ClearOptions
-
 @end
 
 @implementation DisplayInfo
-
-
 @end
 
 @implementation FrameRateOptions
-
-
 @end
 
 @implementation Renderer{
@@ -72,9 +67,20 @@
 - (void)renderStandaloneView:(View *)view{
     nativeRenderer->renderStandaloneView( (filament::View*) view.view);
 }
-- (void)copyFrame:(SwapChain *)dstSwapChain :(Viewport *)dstViewport :(Viewport *)srcViewport :(int)flags{
-    nativeRenderer->copyFrame( (filament::SwapChain*) dstSwapChain.swapchain, FILAMENT_VIEWPORT(dstViewport), FILAMENT_VIEWPORT(srcViewport));
+- (void)copyFrame:(SwapChain *)dstSwapChain :(Viewport)dstViewport :(Viewport)srcViewport :(int)flags{
+    nativeRenderer->copyFrame((filament::SwapChain*) dstSwapChain.swapchain, filament::Viewport(dstViewport.left, dstViewport.bottom, dstViewport.width, dstViewport.height), filament::Viewport(srcViewport.left, srcViewport.bottom, srcViewport.width, srcViewport.height));
 }
+- (NSData *)readPixels:(int)xoffset :(int)yoffset :(int)width :(int)height{
+    auto buf = filament::backend::PixelBufferDescriptor();
+    nativeRenderer->readPixels(xoffset, yoffset, width, height, std::move(buf));
+    return [[NSData alloc] initWithBytes:buf.buffer length:buf.size];
+}
+- (NSData *)readPixels:(RenderTarget *)target :(int)xoffset :(int)yoffset :(int)width :(int)height{
+    auto buf = filament::backend::PixelBufferDescriptor();
+    nativeRenderer->readPixels((filament::RenderTarget*)target.target ,xoffset, yoffset, width, height, std::move(buf));
+    return [[NSData alloc] initWithBytes:buf.buffer length:buf.size];
+}
+
 - (double)getUserTime{
     return nativeRenderer->getUserTime();
 }
