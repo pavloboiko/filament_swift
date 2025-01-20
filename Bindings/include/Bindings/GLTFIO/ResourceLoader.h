@@ -1,29 +1,28 @@
 //
 //  ResourceLoader.h
-
+//  swift-gltf-viewer
+//
 //  Created by Stef Tervelde on 30.06.22.
 //
 #import <Foundation/Foundation.h>
 #import "../Filament/Engine.h"
-#import "TextureProvider.h"
 #import "FilamentAsset.h"
 
 #ifndef ResourceLoader_h
 #define ResourceLoader_h
 
-NS_SWIFT_NAME(glTFIO.ResourceConfiguration)
-@interface ResourceConfiguration : NSObject
-@property (nonnull) Engine* engine;
-@property (nonnull) NSString* path;
-@property (nonnull) bool* normalizeSkinningWeights;
+NS_SWIFT_NAME(ResourceLoader.Options)
+@interface ResourceLoaderOptions : NSObject
+@property bool normalizeSkinningWeights;
+@property bool recomputeBoundingBoxes;
+@property bool ignoreBindTransform;
 @end
-
 
 NS_SWIFT_NAME(glTFIO.ResourceLoader)
 @interface ResourceLoader : NSObject
 
 @property (nonatomic, readonly, nonnull) void* loader  NS_SWIFT_UNAVAILABLE("Don't access the raw pointers");
-- (nonnull id) init: (nonnull ResourceConfiguration *) config;
+- (nonnull id) init: (nonnull Engine*) engine :(nonnull ResourceLoaderOptions*) options;
 - (nonnull id) init NS_UNAVAILABLE;
 
 /**
@@ -40,9 +39,6 @@ NS_SWIFT_NAME(glTFIO.ResourceLoader)
  * need to call this method.
  */
 - (void) addResourceData: (nonnull NSString*) uri :(nonnull NSData*) buffer;
-
-
-- (void) addTextureProvider: (nonnull NSString*) mimeType :(nonnull TextureProvider*) provider;
 - (bool) hasResourceData: (nonnull NSString*) uri;
 /**
  * Frees memory by evicting the URI cache that was populated via addResourceData.

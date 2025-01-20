@@ -1,11 +1,11 @@
 //
 //  MaterialInstance.h
-
+//  swift-gltf-viewer
+//
 //  Created by Stef Tervelde on 30.06.22.
 //
 #import <Foundation/Foundation.h>
 #import "Texture.h"
-#import "TextureSampler.h"
 
 #import <simd/simd.h>
 
@@ -15,7 +15,7 @@
 @interface MaterialInstance : NSObject
 
 @property (nonatomic, readonly, nonnull) void* instance  NS_SWIFT_UNAVAILABLE("Don't access the raw pointers");
-- (nonnull id) init: (nonnull void*) instance NS_SWIFT_UNAVAILABLE("Instances are created internally");
+- (nonnull id) init: (nonnull void*) instance NS_SWIFT_UNAVAILABLE("Create a new renderer with engine.createRenderer");
 - (nonnull id) init NS_UNAVAILABLE;
 
 /**
@@ -44,10 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) setParameterBool4: (NSString*) name :(bool) boolean1 :(bool) boolean2 :(bool) boolean3 :(bool) boolean4;
 - (void) setParameterFloat4: (NSString*) name :(simd_float4) vector;
 - (void) setParameterInt4: (NSString*) name :(simd_int4) vector;
-- (void) setParameterMat3f: (NSString*) name :(simd_float3x3) vector;
-- (void) setParameterMat4f: (NSString*) name :(simd_float4x4) vector;
-- (void) setParameterTexture: (NSString*) name :(Texture*) texture :(TextureSampler*) sampler;
-#warning Add Color Parameters
+- (void) setParameterTexture: (NSString*) name :(Texture*) texture;
 /**
  * Set up a custom scissor rectangle; by default this encompasses the View.
  *

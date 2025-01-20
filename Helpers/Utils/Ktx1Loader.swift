@@ -1,9 +1,11 @@
 //
 //  Ktx1Loader.swift
-
+//  swift-gltf-viewer
+//
 //  Created by Stef Tervelde on 05.07.22.
 //
-import Bindings
-extension Ktx1Loader{
+import FilamentBindings
 
-}
+//extension Ktx1Loader{
+//
+//}

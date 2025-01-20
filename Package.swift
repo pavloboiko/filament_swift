@@ -2,28 +2,35 @@
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
-let targets = [
-    "libbackend","libbasis_transcoder","libcamutils","libcivetweb","libdracodec","libfilabridge","libfilaflat","libfilamat","libfilament-iblprefilter","libfilament","libfilameshio","libgeometry","libgltfio_core","libibl-lite","libibl","libimage","libktxreader","libmeshoptimizer","libmikktspace","libshaders","libsmol-v","libstb","libuberarchive","libuberzlib","libutils","libviewer","libvkshaders","libzstd"
-]
 
 let package = Package(
     name: "filament_swift",
     products: [
         .library(
-            name: "filament",
+            name: "Filament",
             targets: ["Filament"]),
     ],
-    targets: ([
+    dependencies: [
+        .package(url: "https://github.com/Stefterv/filament", exact: "1.25.0")
+    ],
+    targets: [
         .target(
             name: "Filament",
-            dependencies: ["Bindings"],
+            dependencies: [
+                "FilamentBindings"
+            ],
             path: "Helpers"
         ),
         .target(
-            name: "Bindings",
-            dependencies: targets.map({ .byName(name: $0) }),
-            path: "Bindings"
-        )
-    ] + targets.map({ .binaryTarget(name: $0, path: "lib/\($0).xcframework") })),
+            name: "FilamentBindings",
+            dependencies: [
+                "filament",
+            ],
+            path: "Bindings",
+            cxxSettings: [
+                .headerSearchPath("../include")
+            ]
+        ),
+    ],
     cxxLanguageStandard: .cxx17
 )

@@ -1,10 +1,11 @@
 //
 //  LightManager.h
-
+//  swift-gltf-viewer
+//
 //  Created by Stef Tervelde on 30.06.22.
 //
 #import <Foundation/Foundation.h>
-#import "Entity.h"
+#import "../Utils/Entity.h"
 #import <simd/simd.h>
 
 #ifndef LightManager_h
@@ -109,7 +110,7 @@
  * </ul>
  */
 @property (nonatomic, readonly, nonnull) void* manager  NS_SWIFT_UNAVAILABLE("Don't access the raw pointers");
-- (nonnull id) init: (nonnull void*) manager NS_SWIFT_UNAVAILABLE("Instances are created internally");
+- (nonnull id) init: (nonnull void*) manager NS_SWIFT_UNAVAILABLE("Create a new renderer with engine.createRenderer");
 - (nonnull id) init NS_UNAVAILABLE;
 
 /**
@@ -141,14 +142,14 @@
  */
 - (void) destroy: (Entity) entity;
 
-typedef NS_ENUM(NSInteger, LightType) {
-    LightTypeSun = 0,
-    LightTypeDirectional = 1,
-    LightTypePoint = 2,
-    LightTypeFocusedSpot = 3,
-    LightTypeSpot = 4
+typedef NS_ENUM(NSInteger, Type) {
+    Sun = 0,
+    Directional = 1,
+    POINT = 2,
+    FocusedSpot = 3,
+    Spot = 4
 };
-- (LightType) getType: (EntityInstance) instance;
+- (Type) getType: (EntityInstance) instance;
 - (bool) isDirectional: (EntityInstance) instance;
 - (bool) isPointLight: (EntityInstance) instance;
 - (bool) isSpotLight: (EntityInstance) instance;

@@ -1,6 +1,7 @@
 //
 //  LightManager.mm
-
+//  swift-gltf-viewer
+//
 //  Created by Stef Tervelde on 30.06.22.
 //
 #import "Bindings/Filament/LightManager.h"
@@ -29,8 +30,8 @@
 - (void)destroy:(Entity)entity{
     nativeManager->destroy(utils::Entity::import(entity));
 }
-- (LightType)getType:(EntityInstance)instance{
-    return (LightType)nativeManager->getType(instance);
+- (Type)getType:(EntityInstance)instance{
+    return (Type)nativeManager->getType(instance);
 }
 - (bool)isDirectional:(EntityInstance)instance{
     return nativeManager->isDirectional(instance);

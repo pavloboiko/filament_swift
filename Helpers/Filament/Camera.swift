@@ -4,8 +4,7 @@
 //  Created by Stef Tervelde on 30.06.22.
 //
 
-import Bindings
-import simd
+import FilamentBindings
 
 extension Camera{
     public func lookAt(_ at: simd_float3, _ center: simd_float3, _ up: simd_float3){
@@ -59,11 +58,5 @@ extension Camera{
         set{
             setFocusDistance(newValue)
         }
-    }
-    public func setCustomProjection(_ projection: simd_float4x4){
-        setCustomProjection(projection.toDouble(), 0, 9999)
-    }
-    public func setModelMatrix(_ viewMatrix: simd_float4x4){
-        setModelMatrix(viewMatrix.toDouble())
     }
 }

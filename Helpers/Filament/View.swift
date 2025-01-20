@@ -1,9 +1,10 @@
 //
 //  View.swift
-
+//  swift-gltf-viewer
+//
 //  Created by Stef Tervelde on 30.06.22.
 //
-import Bindings
+import FilamentBindings
 
 extension View{
     public var scene: Scene?{
@@ -70,53 +71,4 @@ extension View{
             setAntiAliasing(newValue)
         }
     }
-    public var name: String{
-        get{
-            getName()
-        }
-        set{
-            setName(newValue)
-        }
-    }
-    public var temporalAntiAliasing: TemporalAntiAliasingOptions{
-        get{
-            getTemporalAntiAliasingOptions()
-        }
-        set{
-            setTemporalAntiAliasingOptions(newValue)
-        }
-    }
-    public var screenSpaceReflectionsOptions: ScreenSpaceReflectionsOptions{
-        get{
-            getScreenSpaceReflectionsOptions()
-        }
-        set{
-            setScreenSpaceReflectionsOptions(newValue)
-        }
-    }
-    public var guardBandOptions: GuardBandOptions{
-        get{
-            getGuardBandOptions()
-        }
-        set{
-            setGuardBandOptions(newValue)
-        }
-    }
-    public var multiSampleAntiAliasingOptions: MultiSampleAntiAliasingOptions{
-        get{
-            getMultiSampleAntiAliasingOptions()
-        }
-        set{
-            setMultiSampleAntiAliasingOptions(newValue)
-        }
-    }
-    public var colorGrading: ColorGrading{
-        get{
-            getColorGrading()
-        }
-        set{
-            setColorGrading(newValue)
-        }
-    }
-#warning("Complete")
 }

@@ -1,12 +1,13 @@
 //
 //  AssetLoader.mm
-
+//  swift-gltf-viewer
+//
 //  Created by Stef Tervelde on 30.06.22.
 //
 #import "Bindings/GLTFIO/AssetLoader.h"
 #import <gltfio/AssetLoader.h>
 
-@implementation Configuration
+@implementation AssetConfiguration
 
 
 
@@ -21,7 +22,7 @@
     self->nativeLoader = (filament::gltfio::AssetLoader*)loader;
     return self;
 }
-+ (instancetype)create:(Configuration *)config1{
++ (instancetype)create:(AssetConfiguration *)config1{
     auto config2 = filament::gltfio::AssetConfiguration();
     config2.engine = (filament::Engine*) config1.engine.engine;
     config2.entities = (utils::EntityManager*) config1.entities.manager;
@@ -31,11 +32,16 @@
     return [[AssetLoader alloc] init:loader];
 }
 
-- (FilamentAsset *)createAsset:(NSData*)bytes{
-    auto asset = nativeLoader->createAsset((uint8_t*)bytes.bytes, (uint32_t)bytes.length);
+- (FilamentAsset *)createAssetFromBinary:(NSData*)bytes{
+    auto asset = nativeLoader->createAssetFromBinary((uint8_t*)bytes.bytes, (uint32_t)bytes.length);
     return [[FilamentAsset alloc] init:asset];
 }
 
+- (FilamentAsset *)createAssetFromJson:(NSData*)bytes{
+    auto asset = nativeLoader->createAssetFromJson((uint8_t*)bytes.bytes, (uint32_t)bytes.length);
+    
+    return [[FilamentAsset alloc] init:asset];
+}
 
 - (FilamentInstance *)createInstance:(FilamentAsset *)primary{
     auto instance = nativeLoader->createInstance((filament::gltfio::FilamentAsset*) primary.asset);
@@ -66,25 +72,6 @@
 
 - (void)destroyAsset:(FilamentAsset *)asset{
     nativeLoader->destroyAsset((filament::gltfio::FilamentAsset*) asset.asset);
-}
-
-- (void)enableDiagnostics:(bool)enable {
-    nativeLoader->enableDiagnostics(enable);
-}
-
-- (nonnull NSArray<Material *> *)getMaterials {
-    auto materials = nativeLoader->getMaterials();
-    auto materialsCount = nativeLoader->getMaterialsCount();
-    auto res = [[NSMutableArray alloc] init];
-    for (auto i = 0; i<materialsCount; i++) {
-        auto mat = [[Material alloc] init:(void*)materials[i]];
-        [res addObject: mat];
-    }
-    return res;
-}
-
-+ (void)destroy:(nonnull AssetLoader *)loader {
-    filament::gltfio::AssetLoader::destroy(&loader->nativeLoader);
 }
 
 @end

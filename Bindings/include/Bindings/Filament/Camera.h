@@ -111,16 +111,16 @@
 @interface Camera : NSObject
 
 typedef NS_ENUM(NSInteger, Projection) {
-    ProjectionPerspective = 0,
-    ProjectionOrtho = 1
+    Perspective = 0,
+    Ortho = 1
 };
 typedef NS_ENUM(NSInteger, Fov) {
-    ProjectionVertical = 0,
-    ProjectionHorizontal = 1
+    Vertical = 0,
+    Horizontal = 1
 };
 
 @property (nonatomic, readonly, nonnull) void* camera NS_SWIFT_UNAVAILABLE("Don't access the raw pointers");
-- (nonnull id) init: (nonnull void*) camera NS_SWIFT_UNAVAILABLE("Instances are created internally");
+- (nonnull id) init: (nonnull void*) camera NS_SWIFT_UNAVAILABLE("Create a new renderer with engine.createRenderer");
 - (nonnull id) init NS_UNAVAILABLE;
 
 /**

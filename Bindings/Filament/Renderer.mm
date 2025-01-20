@@ -13,12 +13,17 @@
 #import "../Math.h"
 
 @implementation ClearOptions
+
 @end
 
 @implementation DisplayInfo
+
+
 @end
 
 @implementation FrameRateOptions
+
+
 @end
 
 @implementation Renderer{
@@ -67,45 +72,9 @@
 - (void)renderStandaloneView:(View *)view{
     nativeRenderer->renderStandaloneView( (filament::View*) view.view);
 }
-- (void)copyFrame:(SwapChain *)dstSwapChain :(Viewport)dstViewport :(Viewport)srcViewport :(int)flags{
-    nativeRenderer->copyFrame((filament::SwapChain*) dstSwapChain.swapchain, filament::Viewport(dstViewport.left, dstViewport.bottom, dstViewport.width, dstViewport.height), filament::Viewport(srcViewport.left, srcViewport.bottom, srcViewport.width, srcViewport.height));
+- (void)copyFrame:(SwapChain *)dstSwapChain :(Viewport *)dstViewport :(Viewport *)srcViewport :(int)flags{
+    nativeRenderer->copyFrame( (filament::SwapChain*) dstSwapChain.swapchain, FILAMENT_VIEWPORT(dstViewport), FILAMENT_VIEWPORT(srcViewport));
 }
-- (NSData *)readPixels:(int)xoffset :(int)yoffset :(int)width :(int)height{
-    size_t bufferSize = width * height * 4; // RGBA format
-    
-    void* buffer = malloc(bufferSize);
-    if (buffer == NULL) {
-        NSLog(@"Failed to allocate memory for pixel buffer.");
-        return nil;
-    }
-    
-    filament::backend::PixelBufferDescriptor pixelBufferDescriptor(
-        buffer, bufferSize,
-        filament::backend::PixelDataFormat::RGBA,
-        filament::backend::PixelDataType::UBYTE,
-        [](void* buffer, size_t size, void* user) {
-            free(buffer);
-        },
-        nullptr
-    );
-    
-    nativeRenderer->readPixels(xoffset, yoffset, width, height, std::move(pixelBufferDescriptor));
-    
-    NSData *data = [[NSData alloc] initWithBytesNoCopy:buffer length:bufferSize freeWhenDone:YES];
-    
-    // Log some of the data to ensure it's being populated
-    NSData *sampleData = [data subdataWithRange:NSMakeRange(0, MIN(16, data.length))];
-    NSLog(@"Captured data length: %lu", (unsigned long)data.length);
-    NSLog(@"Sample data: %@", [sampleData description]);
-    
-    return data;
-}
-- (NSData *)readPixels:(RenderTarget *)target :(int)xoffset :(int)yoffset :(int)width :(int)height{
-    auto buf = filament::backend::PixelBufferDescriptor();
-    nativeRenderer->readPixels((filament::RenderTarget*)target.target ,xoffset, yoffset, width, height, std::move(buf));
-    return [[NSData alloc] initWithBytes:buf.buffer length:buf.size];
-}
-
 - (double)getUserTime{
     return nativeRenderer->getUserTime();
 }

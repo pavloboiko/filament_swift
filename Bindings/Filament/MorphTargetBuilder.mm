@@ -1,12 +1,13 @@
 //
 //  MorphTargetBuilder.mm
-
+//  swift-gltf-viewer
+//
 //  Created by Stef Tervelde on 30.06.22.
 //
-#import "Bindings/Filament/MorphTargetBufferBuilder.h"
+#import "Bindings/Filament/MorphTargetBuilder.h"
 #import <filament/MorphTargetBuffer.h>
 
-@implementation MorphTargetBufferBuilder{
+@implementation MorphTargetBuilder{
     filament::MorphTargetBuffer::Builder* nativeBuilder;
 }
 
@@ -14,20 +15,6 @@
     self->_builder = builder;
     self->nativeBuilder = (filament::MorphTargetBuffer::Builder*)builder;
     return self;
-}
-
-- (nonnull instancetype)count:(size_t)count {
-    nativeBuilder->count(count);
-    return self;
-}
-
-- (nonnull instancetype)vertexCount:(size_t)vertexCount {
-    nativeBuilder->vertexCount(vertexCount);
-    return self;
-}
-
-- (nonnull MorphTargetBuffer *)build:(nonnull Engine *)engine {
-    return [[MorphTargetBuffer alloc] init:nativeBuilder->build(*(filament::Engine*)engine.engine)];
 }
 
 @end
