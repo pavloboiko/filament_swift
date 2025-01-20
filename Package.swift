@@ -11,7 +11,7 @@ let package = Package(
     products: [
         .library(
             name: "filament",
-            targets: ["Filament", "Bindings"]),
+            targets: ["Filament", "Bindings"] + targets.map({ $0 })),
     ],
     targets: ([
         .target(
