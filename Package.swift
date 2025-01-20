@@ -17,7 +17,9 @@ let package = Package(
     targets: ([
         .target(
             name: "Filament",
-            dependencies: ["Bindings"],
+            dependencies: [
+                .target(name: "Bindings"),                
+            ],
             path: "Helpers"
         ),
         .target(
