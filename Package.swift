@@ -11,6 +11,7 @@ let package = Package(
     products: [
         .library(
             name: "filament",
+            type: .dynamic,
             targets: ["Filament", "Bindings"] + targets.map({ $0 })),
     ],
     targets: ([
