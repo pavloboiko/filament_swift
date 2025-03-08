@@ -10,20 +10,13 @@ let package = Package(
     name: "filament_swift",
     products: [
         .library(
-            name: "Filament",
-            targets: ["Filament"]
-        ),
-        .library(
-            name: "Bindings",
-            targets: ["Bindings"]
-        ),
+            name: "filament",
+            targets: ["Filament"]),
     ],
     targets: ([
         .target(
             name: "Filament",
-            dependencies: [
-                .target(name: "Bindings"),
-            ],
+            dependencies: ["Bindings"],
             path: "Helpers"
         ),
         .target(
